@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application for Empanelment as Support Person - DCPU Kancheepuram</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .signature-canvas {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.5rem;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .govt-header-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-summary, #printable-summary * {
+                visibility: visible;
+            }
+            #printable-summary {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: black !important;
+                padding: 10px !important;
+                box-shadow: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Official Header -->
+    <header class="govt-header-bg text-white py-6 px-4 shadow-lg">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4 text-center md:text-left">
+                <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border border-white/20 shrink-0">
+                    <i class="fa-solid me-0 fa-hands-holding-child text-3xl text-amber-300"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold tracking-wider uppercase text-sky-200">Government of Tamil Nadu</span>
+                    <h1 class="text-xl md:text-2xl font-bold leading-tight">DEPARTMENT OF CHILDREN WELFARE AND SPECIAL SERVICES</h1>
+                    <p class="text-sm font-medium text-sky-100">DISTRICT CHILD PROTECTION UNIT, KANCHEEPURAM</p>
+                </div>
+            </div>
+            <div class="text-right text-xs bg-white/10 px-3 py-2 rounded-lg border border-white/20 flex flex-col items-end gap-1">
+                <p><i class="fa-solid fa-file-contract text-amber-300 mr-1"></i> Ref: DCPU/KPM/2026/SP-01</p>
+                <p class="text-sky-200">Application for Empanelment as Support Person</p>
+                <button type="button" onclick="triggerDirectPrint()" class="no-print mt-1 px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded font-bold text-[11px] flex items-center gap-1 transition shadow">
+                    <i class="fa-solid fa-print"></i> Quick Print Form
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 my-4">
+
+        <!-- Banner Alert -->
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg mb-6 shadow-sm no-print">
+            <div class="flex items-start">
+                <i class="fa-solid fa-circle-info text-blue-600 text-lg mt-0.5 mr-3"></i>
+                <div>
+                    <h4 class="text-sm font-semibold text-blue-900">Instructions to Applicants</h4>
+                    <p class="text-xs text-blue-700 mt-0.5">Please fill out all mandatory details carefully. Ensure all documents and declarations match your supporting identity proofs. You can preview and print your application after completion.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Wrapper -->
+        <div id="form-container" class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden no-print">
+            <!-- Progress Bar -->
+            <div class="bg-slate-100 border-b border-slate-200 px-6 py-4 flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-slate-600">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</span>
+                    <span>Personal & Contact</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</span>
+                    <span>Qualification & Experience</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</span>
+                    <span>References & Legal</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400"></i>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">4</span>
+                    <span>Declaration & Sign</span>
+                </div>
+            </div>
+
+            <form id="applicationForm" class="p-6 md:p-8 space-y-8" onsubmit="handleFormSubmit(event)">
+
+                <!-- SECTION 1: PERSONAL & CONTACT INFORMATION -->
+                <section>
+                    <h2 class="text-lg font-bold text-slate-900 pb-2 border-b-2 border-blue-600 flex items-center gap-2">
+                        <i class="fa-solid fa-user-check text-blue-600"></i>
+                        1. Personal Details & Photo
+                    </h2>
+
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Photo Upload -->
+                        <div class="md:col-span-1 flex flex-col items-center justify-center bg-slate-50 p-4 rounded-xl border border-dashed border-slate-300">
+                            <div class="relative w-36 h-44 bg-slate-200 rounded-lg overflow-hidden flex flex-col items-center justify-center border border-slate-300 mb-3 shadow-inner" id="photoPreviewContainer">
+                                <i class="fa-solid fa-user-tie text-4xl text-slate-400" id="photoPlaceholderIcon"></i>
+                                <img id="photoPreview" class="hidden w-full h-full object-cover" alt="Applicant Photo">
+                            </div>
+                            <label class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm inline-flex items-center gap-2">
+                                <i class="fa-solid fa-upload"></i> Upload Photo *
+                                <input type="file" id="applicantPhoto" accept="image/*" class="hidden" required onchange="previewImage(event)">
+                            </label>
+                            <span class="text-[11px] text-slate-500 mt-1">Passport size (Max 2MB)</span>
+                        </div>
+
+                        <!-- Basic Information -->
+                        <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">1. Full Name *</label>
+                                <input type="text" id="fullName" required placeholder="Enter full name as in official ID" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Date of Birth (DOB) *</label>
+                                <input type="date" id="dob" required onchange="calculateAge()" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">2. Age (in years) *</label>
+                                <input type="number" id="age" min="18" max="90" required placeholder="Auto-calculated from DOB" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">4. Mobile Number *</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500 text-xs">+91</span>
+                                    <input type="tel" id="mobileNumber" pattern="[0-9]{10}" required placeholder="10-digit mobile number" class="w-full pl-12 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">4. Email ID *</label>
+                                <input type="email" id="emailId" required placeholder="applicant@example.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">3. Residential Address *</label>
+                                <textarea id="address" rows="3" required placeholder="Complete residential address with door no., street, district, and pin code" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: QUALIFICATION & AFFILIATION -->
+                <section>
+                    <h2 class="text-lg font-bold text-slate-900 pb-2 border-b-2 border-blue-600 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-600"></i>
+                        2. Qualifications, Certificates & Affiliation
+                    </h2>
+
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">5. Educational Qualifications *</label>
+                            <textarea id="qualifications" rows="2" required placeholder="Degree/Diploma, Specialization, University/Institute, Year of Completion" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        </div>
+
+                        <!-- Educational Certificates Upload Sub-Section -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1 flex items-center justify-between">
+                                <span>Upload Qualification Certificates (PDF, JPG, PNG - Max 5MB per file) *</span>
+                                <span class="text-[11px] text-blue-700 font-normal"><i class="fa-solid fa-shield-halved mr-1"></i>Official Documents</span>
+                            </label>
+                            <p class="text-xs text-slate-500 mb-3">Please upload self-attested copies of your educational certificates for verification.</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <!-- SSLC / 10th -->
+                                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">10th / SSLC Certificate *</label>
+                                    <input type="file" id="cert_sslc" accept=".pdf,image/*" required onchange="handleCertificateUpload(event, 'sslc')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <div id="cert_sslc_info" class="text-[11px] text-slate-500 mt-1 truncate hidden"></div>
+                                </div>
+
+                                <!-- HSC / 12th -->
+                                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">12th / HSC Certificate *</label>
+                                    <input type="file" id="cert_hsc" accept=".pdf,image/*" required onchange="handleCertificateUpload(event, 'hsc')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <div id="cert_hsc_info" class="text-[11px] text-slate-500 mt-1 truncate hidden"></div>
+                                </div>
+
+                                <!-- UG Degree -->
+                                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">UG Degree Certificate *</label>
+                                    <input type="file" id="cert_ug" accept=".pdf,image/*" required onchange="handleCertificateUpload(event, 'ug')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <div id="cert_ug_info" class="text-[11px] text-slate-500 mt-1 truncate hidden"></div>
+                                </div>
+
+                                <!-- PG Degree -->
+                                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">PG Degree (if applicable)</label>
+                                    <input type="file" id="cert_pg" accept=".pdf,image/*" onchange="handleCertificateUpload(event, 'pg')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <div id="cert_pg_info" class="text-[11px] text-slate-500 mt-1 truncate hidden"></div>
+                                </div>
+
+                                <!-- Other Diplomas / Certifications -->
+                                <div class="bg-white p-3 rounded-lg border border-slate-200 sm:col-span-2 lg:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Other Training / Course Certificates</label>
+                                    <input type="file" id="cert_other" accept=".pdf,image/*" multiple onchange="handleCertificateUpload(event, 'other')" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <div id="cert_other_info" class="text-[11px] text-slate-500 mt-1 truncate hidden"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">6. Organizational Affiliation and Designation (if any)</label>
+                            <input type="text" id="affiliation" placeholder="Organization name, Designation, or enter 'N/A' if independent" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+
+                        <!-- Languages Proficiency Table -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-2">7. Languages Known *</label>
+                            <div class="overflow-x-auto border border-slate-200 rounded-lg">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead class="bg-slate-100 text-slate-700 uppercase text-[11px] font-bold">
+                                        <tr>
+                                            <th class="p-3 border-b">Language</th>
+                                            <th class="p-3 border-b text-center">Speak</th>
+                                            <th class="p-3 border-b text-center">Read</th>
+                                            <th class="p-3 border-b text-center">Write</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 text-xs">
+                                        <tr>
+                                            <td class="p-3 font-semibold text-slate-800">Tamil</td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_tamil_speak" class="w-4 h-4 text-blue-600 rounded"></td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_tamil_read" class="w-4 h-4 text-blue-600 rounded"></td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_tamil_write" class="w-4 h-4 text-blue-600 rounded"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-semibold text-slate-800">English</td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_english_speak" class="w-4 h-4 text-blue-600 rounded"></td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_english_read" class="w-4 h-4 text-blue-600 rounded"></td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_english_write" class="w-4 h-4 text-blue-600 rounded"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-3 font-semibold text-slate-800">
+                                                <input type="text" id="lang_other_name" placeholder="Other Language (e.g. Telugu/Hindi)" class="w-full px-2 py-1 border border-slate-300 rounded text-xs">
+                                            </td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_other_speak" class="w-4 h-4 text-blue-600 rounded"></td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_other_read" class="w-4 h-4 text-blue-600 rounded"></td>
+                                            <td class="p-3 text-center"><input type="checkbox" id="lang_other_write" class="w-4 h-4 text-blue-600 rounded"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: EXPERIENCE & TRAINING -->
+                <section>
+                    <h2 class="text-lg font-bold text-slate-900 pb-2 border-b-2 border-blue-600 flex items-center gap-2">
+                        <i class="fa-solid fa-briefcase text-blue-600"></i>
+                        3. Experience & Training
+                    </h2>
+
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                                8. Experience in working with children and young people (below 18 years of age) *
+                            </label>
+                            <p class="text-xs text-slate-500 mb-1">Specify organization names, duration (months/years), and nature of work (including voluntary work).</p>
+                            <textarea id="childExperience" rows="3" required placeholder="Provide details of your past experience with youth/children..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                                9. Child/Youth-related training/courses attended in any capacity *
+                            </label>
+                            <p class="text-xs text-slate-500 mb-1">Mention course/workshop title, organizing body, year, and duration.</p>
+                            <textarea id="childTraining" rows="3" required placeholder="List training workshops, certifications, or capacity building programs..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: REFERENCES & BACKGROUND -->
+                <section>
+                    <h2 class="text-lg font-bold text-slate-900 pb-2 border-b-2 border-blue-600 flex items-center gap-2">
+                        <i class="fa-solid fa-users text-blue-600"></i>
+                        4. References & Legal History
+                    </h2>
+
+                    <div class="mt-6 space-y-6">
+                        <!-- 10. References -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-2">10. Two References *</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Reference 1 -->
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                    <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Reference 1</h4>
+                                    <div class="space-y-2">
+                                        <input type="text" id="ref1Name" required placeholder="Full Name *" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500">
+                                        <input type="text" id="ref1Desig" required placeholder="Designation & Organization *" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500">
+                                        <input type="tel" id="ref1Contact" required placeholder="Mobile / Contact Number *" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                                <!-- Reference 2 -->
+                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                    <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Reference 2</h4>
+                                    <div class="space-y-2">
+                                        <input type="text" id="ref2Name" required placeholder="Full Name *" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500">
+                                        <input type="text" id="ref2Desig" required placeholder="Designation & Organization *" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500">
+                                        <input type="tel" id="ref2Contact" required placeholder="Mobile / Contact Number *" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:ring-1 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 11. Criminal Record -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                                11. Have you been charged with any criminal offences in the past? What was the outcome? *
+                            </label>
+                            <div class="flex items-center gap-6 my-2">
+                                <label class="inline-flex items-center text-xs font-medium text-slate-700 cursor-pointer">
+                                    <input type="radio" name="criminalCharge" value="No" checked onchange="toggleCriminalDetails(false)" class="w-4 h-4 text-blue-600">
+                                    <span class="ml-2">No</span>
+                                </label>
+                                <label class="inline-flex items-center text-xs font-medium text-slate-700 cursor-pointer">
+                                    <input type="radio" name="criminalCharge" value="Yes" onchange="toggleCriminalDetails(true)" class="w-4 h-4 text-blue-600">
+                                    <span class="ml-2">Yes</span>
+                                </label>
+                            </div>
+                            <div id="criminalDetailsContainer" class="hidden mt-2">
+                                <textarea id="criminalDetails" rows="2" placeholder="Provide details of charges, case number, court, and final outcome..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: DECLARATION -->
+                <section>
+                    <h2 class="text-lg font-bold text-slate-900 pb-2 border-b-2 border-blue-600 flex items-center gap-2">
+                        <i class="fa-solid fa-file-signature text-blue-600"></i>
+                        12. Legal Declaration
+                    </h2>
+
+                    <div class="mt-6 bg-amber-50/50 p-5 rounded-xl border border-amber-200/80 space-y-4">
+                        <p class="text-xs font-medium text-slate-700 leading-relaxed">
+                            I, <input type="text" id="declaringName" required placeholder="[Full Name]" class="px-2 py-1 bg-white border border-slate-300 rounded text-xs font-semibold text-blue-900 w-48 focus:ring-1 focus:ring-blue-500">
+                            son/daughter/wife of <input type="text" id="declaringParent" required placeholder="[Parent / Spouse Name]" class="px-2 py-1 bg-white border border-slate-300 rounded text-xs font-semibold text-blue-900 w-48 focus:ring-1 focus:ring-blue-500">
+                            residing at <input type="text" id="declaringAddress" required placeholder="[Full Address]" class="px-2 py-1 bg-white border border-slate-300 rounded text-xs font-semibold text-blue-900 w-full sm:w-64 mt-1 sm:mt-0 focus:ring-1 focus:ring-blue-500">, hereby declare that:
+                        </p>
+
+                        <div class="space-y-3 text-xs text-slate-700">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" id="decl_1" required class="w-4 h-4 text-blue-600 rounded mt-0.5 shrink-0">
+                                <span><strong>1. No Criminal Record:</strong> I have no criminal record and have never been convicted, arrested, or charged for any offence under the Indian Penal Code (IPC), POCSO Act, Juvenile Justice Act, or any other law related to crimes against children or any other criminal offence.</span>
+                            </label>
+
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" id="decl_2" required class="w-4 h-4 text-blue-600 rounded mt-0.5 shrink-0">
+                                <span><strong>2. Accuracy of Information:</strong> I affirm that all information provided in this application is true, accurate, and complete to the best of my knowledge and belief.</span>
+                            </label>
+
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" id="decl_3" required class="w-4 h-4 text-blue-600 rounded mt-0.5 shrink-0">
+                                <span><strong>3. Legal Action Notice:</strong> I understand that if any false, misleading, or misrepresented information is found in my application or during the course of my engagement, my candidature shall be cancelled, my empanelment terminated, and I shall be liable for legal action under applicable laws.</span>
+                            </label>
+
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" id="decl_4" required class="w-4 h-4 text-blue-600 rounded mt-0.5 shrink-0">
+                                <span><strong>4. Police Verification Consent:</strong> I also consent to a police verification/background check as required for my selection as a Support Person.</span>
+                            </label>
+                        </div>
+
+                        <!-- Date & Place -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-amber-200/60">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Place *</label>
+                                <input type="text" id="appPlace" required placeholder="e.g. Kancheepuram" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Date *</label>
+                                <input type="date" id="appDate" required class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded text-xs">
+                            </div>
+                        </div>
+
+                        <!-- Digital Signature Canvas -->
+                        <div class="pt-2">
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Signature of the Applicant *</label>
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                <div class="bg-white rounded-lg p-1 border border-slate-300">
+                                    <canvas id="signatureCanvas" width="300" height="100" class="signature-canvas"></canvas>
+                                </div>
+                                <div class="space-y-2">
+                                    <button type="button" onclick="clearSignature()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-xs font-medium transition flex items-center gap-1">
+                                        <i class="fa-solid fa-eraser"></i> Clear Signature
+                                    </button>
+                                    <p class="text-[11px] text-slate-500">Draw signature inside the box using mouse or touch screen.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Form Action Controls -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="saveDraft()" class="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Draft
+                    </button>
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Review & Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- PRINTABLE SUMMARY CONTAINER (Hidden by default, shown on successful submission) -->
+        <div id="printable-summary" class="hidden bg-white rounded-xl shadow-lg border border-slate-200 p-8 space-y-6 my-6">
+            <div class="flex justify-between items-start border-b-2 border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">DEPARTMENT OF CHILDREN WELFARE AND SPECIAL SERVICES</h2>
+                    <h3 class="text-md font-semibold text-slate-700">DISTRICT CHILD PROTECTION UNIT, KANCHEEPURAM</h3>
+                    <p class="text-sm font-bold text-blue-900 mt-1">APPLICATION FOR EMPANELMENT AS SUPPORT PERSON</p>
+                </div>
+                <div class="text-right">
+                    <div id="summaryPhoto" class="w-24 h-32 border border-slate-400 overflow-hidden bg-slate-100 flex items-center justify-center text-xs text-slate-400">Photo</div>
+                </div>
+            </div>
+
+            <!-- Application Meta details -->
+            <div class="grid grid-cols-2 gap-4 bg-slate-50 p-3 border border-slate-200 rounded text-xs font-mono">
+                <div><strong>Application Ref ID:</strong> <span id="summaryRefId" class="text-blue-700 font-bold"></span></div>
+                <div><strong>Submission Date:</strong> <span id="summarySubmittedOn"></span></div>
+            </div>
+
+            <!-- Summary Content Table -->
+            <table class="w-full border-collapse border border-slate-300 text-xs">
+                <tbody>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold w-1/3 bg-slate-50">1. Name</td>
+                        <td class="border border-slate-300 p-2" id="sumName"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">2. Date of Birth & Age</td>
+                        <td class="border border-slate-300 p-2" id="sumDobAge"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">3. Address</td>
+                        <td class="border border-slate-300 p-2" id="sumAddress"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">4. Mobile Number & Email</td>
+                        <td class="border border-slate-300 p-2" id="sumContact"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">5. Educational Qualifications</td>
+                        <td class="border border-slate-300 p-2" id="sumQualifications"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">Uploaded Certificates</td>
+                        <td class="border border-slate-300 p-2" id="sumUploadedCertificates"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">6. Organizational Affiliation & Designation</td>
+                        <td class="border border-slate-300 p-2" id="sumAffiliation"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">7. Languages Known</td>
+                        <td class="border border-slate-300 p-2" id="sumLanguages"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">8. Child/Youth Work Experience</td>
+                        <td class="border border-slate-300 p-2 whitespace-pre-line" id="sumExperience"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">9. Training / Courses Attended</td>
+                        <td class="border border-slate-300 p-2 whitespace-pre-line" id="sumTraining"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">10. References</td>
+                        <td class="border border-slate-300 p-2" id="sumReferences"></td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-300 p-2 font-semibold bg-slate-50">11. Criminal Charge Details</td>
+                        <td class="border border-slate-300 p-2" id="sumCriminal"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Declaration Section Preview -->
+            <div class="border border-slate-300 p-4 rounded bg-slate-50/50 space-y-2 text-xs leading-relaxed">
+                <h4 class="font-bold text-slate-900 uppercase">12. DECLARATION</h4>
+                <p>I, <strong id="sumDeclName"></strong>, <span id="sumDeclParent"></span> residing at <strong id="sumDeclAddress"></strong>, hereby declare that:</p>
+                <ol class="list-decimal pl-4 space-y-1 text-slate-700">
+                    <li>I have no criminal record and have never been convicted, arrested, or charged for any offence under the Indian Penal Code (IPC), POCSO Act, Juvenile Justice Act, or any other law related to crimes against children or any other criminal offence.</li>
+                    <li>I affirm that all information provided in this application is true, accurate, and complete to the best of my knowledge and belief.</li>
+                    <li>I understand that if any false, misleading, or misrepresented information is found in my application or during the course of my engagement, my candidature shall be cancelled, my empanelment terminated, and I shall be liable for legal action under applicable laws.</li>
+                    <li>I also consent to a police verification/background check as required for my selection as a Support Person.</li>
+                </ol>
+                <p class="pt-2 text-slate-600 italic">I make this declaration with full understanding and in good faith.</p>
+                
+                <div class="flex justify-between items-end pt-6 text-xs">
+                    <div>
+                        <p><strong>Date:</strong> <span id="sumDate"></span></p>
+                        <p><strong>Place:</strong> <span id="sumPlace"></span></p>
+                    </div>
+                    <div class="text-center">
+                        <div id="summarySignatureImg" class="h-12 border-b border-slate-400 mb-1 flex items-center justify-center"></div>
+                        <p><strong>Signature of the Applicant</strong></p>
+                        <p class="text-[10px] text-slate-500">(<span id="sumFullNameSign"></span>)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons for Summary -->
+            <div class="flex flex-wrap justify-between items-center gap-4 no-print pt-4">
+                <button onclick="editApplication()" class="px-5 py-2.5 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Application
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="window.print()" class="px-6 py-2.5 bg-green-700 hover:bg-green-800 text-white rounded-lg text-xs font-bold shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i> Print / Save as PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-auto no-print">
+        <div class="max-w-5xl mx-auto px-4 text-center space-y-2">
+            <p>© 2026 District Child Protection Unit (DCPU), Kancheepuram District, Tamil Nadu.</p>
+            <p class="text-slate-500">Designed for Support Person Empanelment | Child Protection Services</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Signature Canvas State
+        let canvas, ctx;
+        let isDrawing = false;
+        let photoDataUrl = '';
+        let uploadedCertificatesList = {};
+
+        window.onload = function() {
+            // Set current date default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appDate').value = today;
+
+            // Initialize Signature Canvas
+            canvas = document.getElementById('signatureCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Canvas styling
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+
+            // Event Listeners for Drawing
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            // Touch events for mobile devices
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+            canvas.addEventListener('touchend', stopDrawing);
+
+            // Auto-fill declaration name from main name
+            document.getElementById('fullName').addEventListener('input', function(e) {
+                document.getElementById('declaringName').value = e.target.value;
+            });
+
+            // Load draft if available
+            loadDraft();
+        };
+
+        function handleCertificateUpload(event, key) {
+            const files = event.target.files;
+            const infoDiv = document.getElementById(`cert_${key}_info`);
+            if (files && files.length > 0) {
+                const names = [];
+                for (let i = 0; i < files.length; i++) {
+                    const f = files[i];
+                    if (f.size > 5 * 1024 * 1024) {
+                        alert(`File ${f.name} exceeds 5MB size limit.`);
+                        event.target.value = '';
+                        infoDiv.classList.add('hidden');
+                        delete uploadedCertificatesList[key];
+                        return;
+                    }
+                    names.push(`${f.name} (${(f.size / 1024).toFixed(1)} KB)`);
+                }
+                uploadedCertificatesList[key] = names;
+                infoDiv.innerHTML = `<span class="text-green-700 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i> ${names.join(', ')}</span>`;
+                infoDiv.classList.remove('hidden');
+            } else {
+                infoDiv.classList.add('hidden');
+                delete uploadedCertificatesList[key];
+            }
+        }
+
+        function calculateAge() {
+            const dobValue = document.getElementById('dob').value;
+            if (!dobValue) return;
+            const dob = new Date(dobValue);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            if (age >= 0) {
+                document.getElementById('age').value = age;
+            }
+        }
+
+        function triggerDirectPrint() {
+            const form = document.getElementById('applicationForm');
+            if (form.checkValidity()) {
+                handleFormSubmit(new Event('submit'));
+                window.print();
+            } else {
+                form.reportValidity();
+            }
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            ctx.beginPath();
+            const pos = getCanvasPos(e);
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getCanvasPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function getCanvasPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX || e.touches[0].clientX) - rect.left,
+                y: (e.clientY || e.touches[0].clientY) - rect.top
+            };
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent("mousemove", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function isCanvasBlank() {
+            const pixelBuffer = new Uint32Array(
+                ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+            );
+            return !pixelBuffer.some(color => color !== 0);
+        }
+
+        // Image Preview Handler
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Photo size exceeds 2MB. Please upload a smaller image.');
+                    event.target.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoDataUrl = e.target.result;
+                    const preview = document.getElementById('photoPreview');
+                    preview.src = photoDataUrl;
+                    preview.classList.remove('hidden');
+                    document.getElementById('photoPlaceholderIcon').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleCriminalDetails(show) {
+            const container = document.getElementById('criminalDetailsContainer');
+            const textarea = document.getElementById('criminalDetails');
+            if (show) {
+                container.classList.remove('hidden');
+                textarea.setAttribute('required', 'required');
+            } else {
+                container.classList.add('hidden');
+                textarea.removeAttribute('required');
+                textarea.value = '';
+            }
+        }
+
+        // Form Submission Logic
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            // Validate Photo Upload
+            if (!photoDataUrl) {
+                alert('Please upload a passport-size photo.');
+                return;
+            }
+
+            // Validate Signature
+            if (isCanvasBlank()) {
+                alert('Please provide your digital signature before submitting.');
+                return;
+            }
+
+            // Generate Ref ID
+            const refId = 'DCPU-KPM-' + Math.floor(100000 + Math.random() * 900000);
+            const now = new Date().toLocaleString('en-IN');
+
+            // Format Languages
+            const langs = [];
+            if (document.getElementById('lang_tamil_speak').checked || document.getElementById('lang_tamil_read').checked || document.getElementById('lang_tamil_write').checked) {
+                let tamilDetails = [];
+                if (document.getElementById('lang_tamil_speak').checked) tamilDetails.push('Speak');
+                if (document.getElementById('lang_tamil_read').checked) tamilDetails.push('Read');
+                if (document.getElementById('lang_tamil_write').checked) tamilDetails.push('Write');
+                langs.push(`Tamil (${tamilDetails.join(', ')})`);
+            }
+            if (document.getElementById('lang_english_speak').checked || document.getElementById('lang_english_read').checked || document.getElementById('lang_english_write').checked) {
+                let engDetails = [];
+                if (document.getElementById('lang_english_speak').checked) engDetails.push('Speak');
+                if (document.getElementById('lang_english_read').checked) engDetails.push('Read');
+                if (document.getElementById('lang_english_write').checked) engDetails.push('Write');
+                langs.push(`English (${engDetails.join(', ')})`);
+            }
+
+            const otherName = document.getElementById('lang_other_name').value.trim();
+            if (otherName) {
+                let othDetails = [];
+                if (document.getElementById('lang_other_speak').checked) othDetails.push('Speak');
+                if (document.getElementById('lang_other_read').checked) othDetails.push('Read');
+                if (document.getElementById('lang_other_write').checked) othDetails.push('Write');
+                langs.push(`${otherName} (${othDetails.join(', ')})`);
+            }
+
+            // Populate Summary Document Fields
+            document.getElementById('summaryRefId').innerText = refId;
+            document.getElementById('summarySubmittedOn').innerText = now;
+
+            // Photo
+            document.getElementById('summaryPhoto').innerHTML = `<img src="${photoDataUrl}" class="w-full h-full object-cover">`;
+
+            document.getElementById('sumName').innerText = document.getElementById('fullName').value;
+            const dobVal = document.getElementById('dob').value;
+            const ageVal = document.getElementById('age').value;
+            document.getElementById('sumDobAge').innerText = `DOB: ${dobVal} (${ageVal} years)`;
+            document.getElementById('sumAddress').innerText = document.getElementById('address').value;
+            document.getElementById('sumContact').innerText = `Mobile: ${document.getElementById('mobileNumber').value} | Email: ${document.getElementById('emailId').value}`;
+            document.getElementById('sumQualifications').innerText = document.getElementById('qualifications').value;
+
+            // Formatted Uploaded Certificates List
+            const certSummaries = [];
+            if (uploadedCertificatesList.sslc) certSummaries.push(`SSLC: ${uploadedCertificatesList.sslc.join(', ')}`);
+            if (uploadedCertificatesList.hsc) certSummaries.push(`HSC: ${uploadedCertificatesList.hsc.join(', ')}`);
+            if (uploadedCertificatesList.ug) certSummaries.push(`UG: ${uploadedCertificatesList.ug.join(', ')}`);
+            if (uploadedCertificatesList.pg) certSummaries.push(`PG: ${uploadedCertificatesList.pg.join(', ')}`);
+            if (uploadedCertificatesList.other) certSummaries.push(`Others: ${uploadedCertificatesList.other.join(', ')}`);
+
+            document.getElementById('sumUploadedCertificates').innerHTML = certSummaries.length > 0 
+                ? certSummaries.map(item => `<div class="text-slate-800"><i class="fa-solid fa-paperclip text-blue-600 mr-1"></i>${item}</div>`).join('')
+                : 'No certificate files attached';
+
+            document.getElementById('sumAffiliation').innerText = document.getElementById('affiliation').value || 'N/A';
+            document.getElementById('sumLanguages').innerText = langs.join('; ') || 'None selected';
+            document.getElementById('sumExperience').innerText = document.getElementById('childExperience').value;
+            document.getElementById('sumTraining').innerText = document.getElementById('childTraining').value;
+
+            // References
+            const ref1 = `1. ${document.getElementById('ref1Name').value} (${document.getElementById('ref1Desig').value}) - Contact: ${document.getElementById('ref1Contact').value}`;
+            const ref2 = `2. ${document.getElementById('ref2Name').value} (${document.getElementById('ref2Desig').value}) - Contact: ${document.getElementById('ref2Contact').value}`;
+            document.getElementById('sumReferences').innerHTML = `${ref1}<br>${ref2}`;
+
+            // Criminal Charge
+            const criminalRadio = document.querySelector('input[name="criminalCharge"]:checked').value;
+            if (criminalRadio === 'Yes') {
+                document.getElementById('sumCriminal').innerText = `Yes - Details: ${document.getElementById('criminalDetails').value}`;
+            } else {
+                document.getElementById('sumCriminal').innerText = 'No criminal charges or past offences.';
+            }
+
+            // Declaration Section
+            document.getElementById('sumDeclName').innerText = document.getElementById('declaringName').value;
+            document.getElementById('sumDeclParent').innerText = `son/daughter/wife of ${document.getElementById('declaringParent').value},`;
+            document.getElementById('sumDeclAddress').innerText = document.getElementById('declaringAddress').value;
+            document.getElementById('sumPlace').innerText = document.getElementById('appPlace').value;
+            document.getElementById('sumDate').innerText = document.getElementById('appDate').value;
+            document.getElementById('sumFullNameSign').innerText = document.getElementById('fullName').value;
+
+            // Signature Data URL
+            const sigImgUrl = canvas.toDataURL();
+            document.getElementById('summarySignatureImg').innerHTML = `<img src="${sigImgUrl}" class="h-10 object-contain">`;
+
+            // Display Printable Summary
+            document.getElementById('form-container').classList.add('hidden');
+            document.getElementById('printable-summary').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function editApplication() {
+            document.getElementById('printable-summary').classList.add('hidden');
+            document.getElementById('form-container').classList.remove('hidden');
+        }
+
+        // Local Storage Draft Feature
+        function saveDraft() {
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                dob: document.getElementById('dob').value,
+                age: document.getElementById('age').value,
+                address: document.getElementById('address').value,
+                mobileNumber: document.getElementById('mobileNumber').value,
+                emailId: document.getElementById('emailId').value,
+                qualifications: document.getElementById('qualifications').value,
+                affiliation: document.getElementById('affiliation').value,
+                childExperience: document.getElementById('childExperience').value,
+                childTraining: document.getElementById('childTraining').value,
+                ref1Name: document.getElementById('ref1Name').value,
+                ref1Desig: document.getElementById('ref1Desig').value,
+                ref1Contact: document.getElementById('ref1Contact').value,
+                ref2Name: document.getElementById('ref2Name').value,
+                ref2Desig: document.getElementById('ref2Desig').value,
+                ref2Contact: document.getElementById('ref2Contact').value,
+                declaringParent: document.getElementById('declaringParent').value,
+                declaringAddress: document.getElementById('declaringAddress').value,
+                appPlace: document.getElementById('appPlace').value
+            };
+            localStorage.setItem('dcpu_app_draft', JSON.stringify(formData));
+            alert('Your application draft has been saved locally on this browser.');
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem('dcpu_app_draft');
+            if (draft) {
+                try {
+                    const data = JSON.parse(draft);
+                    for (let key in data) {
+                        const el = document.getElementById(key);
+                        if (el && data[key]) {
+                            el.value = data[key];
+                        }
+                    }
+                    if (data.fullName) {
+                        document.getElementById('declaringName').value = data.fullName;
+                    }
+                } catch(e) {
+                    console.error('Draft load error:', e);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
